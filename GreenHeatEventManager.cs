@@ -8,12 +8,13 @@ public class GreenHeatEventManager : MonoBehaviour
     public static event GreenHeatRelease OnGreenHeatRelease;
     public delegate void GreenHeatHover(GreenHeatMessage message);
     public static event GreenHeatHover OnGreenHeatHover;
-    
+    public delegate void GreenHeatDrag(GreenHeatMessage message);
+    public static event GreenHeatDrag OnGreenHeatDrag;
+
     private bool isConnecting = false;
     private WebSocket ws;
 
     private string url = "wss://heat.prod.kr/ratcousin";
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     
     private static GreenHeatEventManager _instance;
 
@@ -70,6 +71,9 @@ public class GreenHeatEventManager : MonoBehaviour
                 case "hover":
                     OnGreenHeatHover?.Invoke(message);
                     break;
+                case "drag":
+                    OnGreenHeatDrag?.Invoke(message);
+                    break;
             }
 
         };
@@ -100,7 +104,7 @@ public class GreenHeatMessage
     public string id;
     public float x;
     public float y;
-    public string type; //can be "click", "release", or "hover"
+    public string type; //can be "click", "release", "drag", or "hover"
     public string button; //can be "left", "right", "middle"
     public bool shift;
     public bool ctrl;
